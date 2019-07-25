@@ -1,4 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from "./app"
-ReactDOM.render(<App/>, document.getElementById('root'));
+import Router from "@/router"
+import {Provider} from "react-redux"
+import store from "@/store"
+ReactDOM.render(
+<Provider store={store}>
+<Router/>
+</Provider>
+, document.getElementById('root'));
+// new Vue({
+// render(h){
+//   return h(<App/>)
+// }
+// }).$mount("#App")

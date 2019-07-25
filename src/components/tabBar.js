@@ -1,22 +1,24 @@
 import React, { Component } from "react"
 import { TabBar } from 'antd-mobile';
+import {withRouter} from "react-router-dom"
 
-export default class TabBarComp extends Component {
+class TabBarComp extends Component {
   constructor(props) {
     super(props);
     this.state = {
       selectedTab: 'weixin',
       navBarList: [
-        { title: "微信", key: "weixin", icon: { uri: require("./img/boss.png") }, activeIcon: { uri: require("./img/boss-active.png") } },
-        { title: "职位", key: "job", icon: { uri: require("./img/job.png") }, activeIcon: { uri: require("./img/job-active.png") } },
-        { title: "消息", key: "msg", num: 11, icon: { uri: require("./img/msg.png") }, activeIcon: { uri: require("./img/msg-active.png") } },
-        { title: "我的", key: "user", icon: { uri: require("./img/user.png") }, activeIcon: { uri: require("./img/user-active.png") } }
+        { title: "职位", key: "dashboard", icon: { uri: require("./img/boss.png") }, activeIcon: { uri: require("./img/boss-active.png") },path:"/dashboard" },
+        { title: "公司", key: "compony", icon: { uri: require("./img/job.png") }, activeIcon: { uri: require("./img/job-active.png")} ,path:"/compony" },
+        { title: "消息", key: "message", num: 11, icon: { uri: require("./img/msg.png") }, activeIcon: { uri: require("./img/msg-active.png")},path:"message"  },
+        { title: "我的", key: "my", icon: { uri: require("./img/user.png") }, activeIcon: { uri: require("./img/user-active.png") },path:"my" }
       ]
     };
   }
 
 
   render() {
+
     return (
       <React.Fragment>
         <TabBar
@@ -33,12 +35,12 @@ export default class TabBarComp extends Component {
                 icon={item.icon}
                 badge={item.num}
                 selectedIcon={item.activeIcon}
-                selected={this.state.selectedTab === item.key}
+                selected={this.props.location.pathname === `/${item.key}`}
                 onPress={() => {
                   this.setState({
                     selectedTab: item.key,
                   });
-                  console.log(this.props)
+                  this.props.history.push(item.path)
                 }}
               />
               )
@@ -49,3 +51,4 @@ export default class TabBarComp extends Component {
     );
   }
 }
+export default withRouter(TabBarComp)

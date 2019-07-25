@@ -1,24 +1,25 @@
 import React, { Component } from 'react'
-import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom"
-import Dashboard from "@/views/dashboard"
-import Login from "@/views/login"
-export default class app extends Component {
+import {withRouter} from "react-router-dom"
+import TabBarComp from "@/components/TabBar"
+import Header from "@/components/Header"
+import "./app.css"
+@withRouter
+class app extends Component {
   render() {
+    const array=['/dashboard','/compony','/message','/my']  //区分哪些不需要tabbar
     return (
-      <Router>
-        <Link to="/dashboard">
-
-        </Link>
-        <Link to="/login">
-
-        </Link>
-        <Switch>
-          <Route path="/" exact component={Dashboard} />
-          <Route path="/dashboard" component={Dashboard} />
-          <Route path="/login" component={Login} />
-        </Switch>
-
-      </Router>
+      <div className="dashboard_wrap">
+        <Header></Header>
+        <div className="dashboard_content">
+          {this.props.children}
+          {/* router-view */}
+        </div>
+        {
+          array.includes(this.props.location.pathname)?<TabBarComp></TabBarComp>:null
+        }
+        
+      </div>
     )
   }
 }
+export default app
