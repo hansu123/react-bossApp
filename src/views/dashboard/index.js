@@ -5,6 +5,7 @@ import SearchBar from "@/components/searchBar"
 import "./index.css"
 export default class Dashborad extends Component {
   render() {
+    console.log(this.props)
     return (
       <div className="dashboard_wrap">
         <Header></Header>
@@ -12,7 +13,7 @@ export default class Dashborad extends Component {
         <SearchBar></SearchBar>
         </div>
        
-        <TabBarComp></TabBarComp>
+        <TabBarComp histroy={this.props}></TabBarComp>
       </div>
     )
   }
