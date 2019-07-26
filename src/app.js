@@ -6,7 +6,7 @@ import "./app.css"
 @withRouter
 class app extends Component {
   render() {
-    const array=['/dashboard','/compony','/message','/my']  //区分哪些不需要tabbar
+    const array=['/','/dashboard','/compony','/message','/my']  //区分哪些不需要tabbar
     return (
       <div className="dashboard_wrap">
         <Header></Header>
