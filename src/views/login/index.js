@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
-import { connect } from "react-redux"
 import { InputItem, Button, Radio } from 'antd-mobile';
 import { createForm } from 'rc-form';
-import { getToken } from "@/store/actionCreators"
-import Header from "@/components/Header"
-// import store from "@/store"
-import "./index.css"
+import connect from "@/utils/connect"
+
+import "./index.scss"
 const { RadioItem } = Radio
+@connect
 class Login extends Component {
   constructor(props) {
     super(props)
@@ -17,14 +16,15 @@ class Login extends Component {
         { value: 1, label: '普通用户' },
       ]
     }
-
   }
   login = () => {
     let data = this.props.form.getFieldsValue() //获取input的值
-    this.props.handleLogin(data).then(()=>{
+    this.props.getToken(data).then((data)=>{
+      console.log(data)
       this.props.history.push("/")
     })
     
+ 
   }
   componentWillMount() {
     console.log(this.props.history)
@@ -34,8 +34,8 @@ class Login extends Component {
     const { getFieldProps } = this.props.form;
     return (
       <div>
-        <Header></Header>
-        <div style={{ background: "#fff", display: "flex", height: "100vh", flexDirection: "column", marginTop: "40px", padding: "0 10px" }}>
+        
+        <div className="login_content">
           <div>
             <h2>账号登录</h2>
             <InputItem
@@ -56,31 +56,14 @@ class Login extends Component {
                 {i.label}{i.extra}
               </RadioItem>
             ))}
-
             <Button type="primary" style={{ background: "#ccc" }} onClick={this.login}>登录</Button>
-
-            {this.props.token}
           </div>
-
-
         </div></div>
     )
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    token: state.user.token,
-  }
-}
-const mapDispatchToProps = (dispatch) => {
-  return {
-    async handleLogin(data) {
-      let d=await dispatch(getToken(data))
-      return d
-    }
-  }
-}
+
 const LoginComp = createForm()(Login);
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginComp)
+export default LoginComp

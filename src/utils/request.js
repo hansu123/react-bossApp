@@ -1,9 +1,10 @@
 import axios from "axios"
 
 const service=axios.create({
-  baseURL:" https://www.easy-mock.com/mock/5d3911c824ff2f226dcaf0b4/boss",
+  // baseURL:" https://www.easy-mock.com/mock/5d3911c824ff2f226dcaf0b4/boss",
+  baseURL:"http://localhost:8989/",
   timeout:10000,
-  withCredentials: true //是否携带cookie
+  // withCredentials: true //是否携带cookie
 })
 
 service.interceptors.request.use((config)=>{
@@ -20,14 +21,14 @@ service.interceptors.response.use((response)=>{
 
 class Requset{
 
-get(url,params){
+get(url,params={}){
  return service({
    url,
    method:"GET",
    params
  })
 }
-post(url,data){
+post(url,data={}){
  return service({
    url,
    method:"POST",

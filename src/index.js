@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import Router from "@/router"
 import {Provider} from "react-redux"
 import store from "@/store"
+import "@/utils/rem"
 ReactDOM.render(
 <Provider store={store}>
 <Router/>

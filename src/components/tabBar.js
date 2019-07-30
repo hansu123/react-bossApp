@@ -1,22 +1,31 @@
 import React, { Component } from "react"
 import { TabBar } from 'antd-mobile';
 import {withRouter} from "react-router-dom"
-
+import connect from "@/utils/connect"
+@connect
+@withRouter
 class TabBarComp extends Component {
   constructor(props) {
     super(props);
     this.state = {
       selectedTab: 'weixin',
       navBarList: [
-        { title: "职位", key: "dashboard", icon: { uri: require("./img/boss.png") }, activeIcon: { uri: require("./img/boss-active.png") },path:"/dashboard" },
-        { title: "公司", key: "compony", icon: { uri: require("./img/job.png") }, activeIcon: { uri: require("./img/job-active.png")} ,path:"/compony" },
-        { title: "消息", key: "message", num: 11, icon: { uri: require("./img/msg.png") }, activeIcon: { uri: require("./img/msg-active.png")},path:"message"  },
-        { title: "我的", key: "my", icon: { uri: require("./img/user.png") }, activeIcon: { uri: require("./img/user-active.png") },path:"my" }
-      ]
+        { title: "职位", key: "dashboard", icon: { uri: require("@/common/img/tabBar/boss.png") }, activeIcon: { uri: require("@/common/img/tabBar/boss-active.png") },path:"/dashboard" },
+        { title: "公司", key: "compony", icon: { uri: require("@/common/img/tabBar/job.png") }, activeIcon: { uri: require("@/common/img/tabBar/job-active.png")} ,path:"/compony" },
+        { title: "消息", key: "message",  icon: { uri: require("@/common/img/tabBar/msg.png") }, activeIcon: { uri: require("@/common/img/tabBar/msg-active.png")},path:"message"  },
+        { title: "我的", key: "my", icon: { uri: require("@/common/img/tabBar/user.png") }, activeIcon: { uri: require("@/common/img/tabBar/user-active.png") },path:"my" }
+      ],
+      unreadNum:0
     };
   }
 
-
+  componentDidMount() {
+    this.props.getChatList().then(()=>{
+      this.setState({
+        unreadNum:this.props.state.chat.unread
+      })
+    })
+  }
   render() {
 
     return (
@@ -33,7 +42,7 @@ class TabBarComp extends Component {
                 title={item.title}
                 key={item.key}
                 icon={item.icon}
-                badge={item.num}
+                badge={item.key==="message"?this.state.unreadNum:item.num}
                 selectedIcon={item.activeIcon}
                 selected={this.props.location.pathname === `/${item.key}`}
                 onPress={() => {
@@ -51,4 +60,4 @@ class TabBarComp extends Component {
     );
   }
 }
-export default withRouter(TabBarComp)
+export default TabBarComp

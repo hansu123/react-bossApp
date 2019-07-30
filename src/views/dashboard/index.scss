@@ -1,0 +1,19 @@
+.dashboard_wrap{
+  height:100%;
+  .am-navbar{
+    background:rgb(93, 213, 200)
+  }
+  .dashboard_content{
+    margin-top:0.4rem;
+    .job_body{
+      display:flex;
+      flex-direction:column
+    }
+    .tag_content{
+      margin-top:10px
+    }
+    .tag_content>div{
+      margin-right:10px;
+    }
+  }
+}

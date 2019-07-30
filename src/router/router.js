@@ -1,41 +1,51 @@
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom"
-import {connect} from "react-redux"
+import connect from "@/utils/connect"
 import App from "@/app"
-import Dashboard from "@/views/dashboard"
-import Login from "@/views/login"
-import Compony from "@/views/compony"
-import Message from "@/views/message"
-import Chat from "@/views/chat"
-import My from "@/views/my"
+import routers from "@/config/router"
+import AuthRouter from "./authRouter"
+
+
+
+@connect
 class RouterComp extends Component {
+  handleGetUserInfo(){
+    this.props.getUserInfo()
+  }
   render() {
-    console.log(this.props.token)
+    let {state}=this.props
     return (
       <div>
-          <Router>
+        <Router>
           <App>
             <Switch>
-              <Route path="/login" component={Login} />
-              {this.props.token?
-                <Route path="/" exact component={Dashboard} />
-                : <Redirect to="/login"></Redirect>
+              {
+                routers.map((router) => {
+                  if (router.meta.auth) {
+                    if (state.user.token) {
+                      if(state.user.userInfo){
+                        if (router.path === "/") {
+                          return (<Route exact path={router.path} key={router.path} render={() => { return <Redirect to={router.redirect}></Redirect> }} />)
+                        }
+                        return (<Route path={router.path} exact component={router.component} key={router.path} />)
+                      }
+                      else{
+                        return <AuthRouter></AuthRouter>
+                      }
+                    }
+                    else {
+                      return <Redirect to="/login"></Redirect>
+                    }
+                  }
+                  return (<Route path={router.path} exact component={router.component} key={router.path} />)
+                })
               }
-              <Route path="/dashboard" component={Dashboard} />
-              <Route path="/compony" component={Compony}/>
-              <Route path="/message" component={Message}/>
-              <Route path="/chat" component={Chat}/>
-              <Route path="/my" component={My}/>
             </Switch>
-            </App>
-          </Router>
+          </App>
+        </Router>
       </div>
     )
   }
 }
-const mapStateToProps=(state)=>{
-  return{
-    token:state.user.token
-  }
-}
-export default connect(mapStateToProps,null)(RouterComp)
+
+export default RouterComp

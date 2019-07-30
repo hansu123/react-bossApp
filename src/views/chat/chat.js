@@ -1,50 +1,80 @@
 import React, { Component } from 'react'
-import {createForm} from "rc-form"
-import io from "socket.io-client"
-import {InputItem,Button} from "antd-mobile"
-import "./chat.css"
-const socket=io("ws://localhost:8989")
+import connect from "@/utils/connect"
+import { createForm } from "rc-form"
+import { InputItem, Button,NavBar,Icon } from "antd-mobile"
+import "./chat.scss"
 
+@connect
 class chat extends Component {
-  constructor(props){
+  constructor(props) {
     super(props)
-    this.state={
-    message:[],
-    text:""
+    this.state = {
+      message: [],
+      text: "请输入..",
+      recruiter:{}
     }
   }
-  sendMessage=()=>{
-    let d=this.props.form.getFieldsValue()
-    socket.emit("sendMsg",{
-      text:d.message
-    })
+  sendMessage = () => {
+    let {user} =this.props.state
+    let d = this.props.form.getFieldsValue()
+    this.props.sendMsg(
+      {
+        from: user.userInfo.userName,
+        to: "hanmeimei",
+        content: d.message,
+        avatar:user.userInfo.avatar
+      }
+    )
     this.setState({
-      text:""
+      text: ""
     })
   }
-  componentDidMount(){
-    socket.on("reply",(data)=>{
-      this.setState((prevState)=>{
-        return {
-          message:[...prevState.message,data.text]
-        }
-      })
+  componentDidMount() {
+    this.setState({
+      recruiter:this.props.history.location.state.recruiter
+    })
+    this.props.getChatList().then(()=>{
+      console.log(this.props.state.chat.unread)
+    })
+    this.props.reciveMsg().then(()=>{
+      console.log(this.props.state.chat.unread)
     })
   }
   render() {
     const { getFieldProps } = this.props.form;
     return (
       <div className="chat_wrap">
+        <NavBar
+          mode="dark"
+          icon={<Icon type="left" />}
+          onLeftClick={() => {this.props.history.goBack()}}
+          rightContent={[
+            <Icon key="0" type="search" style={{ marginRight: '16px' }} />,
+            <Icon key="1" type="ellipsis" />,
+          ]}
+        >{this.state.recruiter.name}{this.state.recruiter.identity}</NavBar>
+        <div className="chat_content">
         {
-          this.state.message.map((item,index)=>{
-            return <p key={index}>{item}</p>
-          })
+          this.props.state.chat.msgList.map((item, index) => {
+            return item.from === this.props.state.user.userInfo.userName?(
+                <div key={index} className="chat_item_right" >
+                <p className="chat_item_text">{item.content}</p>
+                <img src={this.props.state.user.userInfo.avatar} alt="chat_avatar" className="chat_item_avatar"></img>
+                </div>
+                ):(
+                <div key={index} className="chat_item_left" >
+                  <img src={item.avatar} alt="chat_avatar" className="chat_item_avatar"></img>
+                  <p className="chat_item_text">{item.content}</p>
+                </div>)
+          }
+          )
         }
         <div className="chat_bar">
-        <InputItem
+          <InputItem defaultValue={this.state.text}
             {...getFieldProps('message')}
             extra={<Button type="primary" size="small" onClick={this.sendMessage}>发送</Button>}
           ></InputItem>
+        </div>
         </div>
       </div>
     )

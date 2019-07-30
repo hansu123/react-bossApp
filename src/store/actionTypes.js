@@ -1,1 +1,4 @@
 export const SET_TOKEN="SET_TOKEN"
+export const SET_USERINFO="SET_USERINFO"
+export const SET_RECIVECHAT="SET_RECIVECHAT"
+export const SET_CHATLIST="SET_CAHTLIST"

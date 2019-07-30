@@ -1,0 +1,14 @@
+.login_content{
+  background: #fff;
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  margin-top: 40px;
+  padding:0 10px;
+  .am-list-item{
+    padding-left:0;
+  }
+  .am-list-item.am-input-item{
+    padding-left:0;
+  }
+}
